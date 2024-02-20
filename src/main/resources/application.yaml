@@ -1,0 +1,21 @@
+server:
+  port: ${PARTICIPANT_PORT}
+  host: ${PARTICIPANT_HOST}
+  static.classpath:
+    location: /WEB
+    welcome: index.html
+
+mp.lra:
+  coordinator.url: ${COORDINATOR_URL}
+  propagation.active: true
+  participant.url: "http://${PARTICIPANT_HOST}:${PARTICIPANT_PORT}"
+
+javax.sql.DataSource:
+  accounts-db:
+    dataSourceClassName: org.postgresql.ds.PGPoolingDataSource
+    dataSource:
+      serverName: ${DB_HOST}
+      portNumber: ${DB_PORT}
+      databaseName: accounts-db
+      user: user
+      password: pass

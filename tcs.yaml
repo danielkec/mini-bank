@@ -1,0 +1,28 @@
+tmmAppName: tcs
+tmmConfiguration:
+  listenAddr: 0.0.0.0:8080
+  internalAddr: http://127.0.0.1:8080
+  externalUrl: http://lra-coordinator.local:8080
+  xaCoordinator:
+    enabled: false
+  lraCoordinator:
+    enabled: true
+  tccCoordinator:
+    enabled: false
+  maxRetryCount: 10
+  minRetryInterval: 1000
+  maxRetryInterval: 10000
+  logging:
+    httpTraceEnabled: true
+    level: debug
+    devMode: true
+  storage:
+    type: memory
+  authentication:
+    enabled: false
+  authorization:
+    enabled: false
+  serveTLS:
+    enabled: false
+  narayanaLraCompatibilityMode:
+    enabled: true
