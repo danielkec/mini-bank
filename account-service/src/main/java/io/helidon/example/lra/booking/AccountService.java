@@ -28,12 +28,18 @@ public class AccountService {
                 .getResultList();
     }
 
+    public List<Account> getAllAccounts() {
+        return entityManager.createNamedQuery("getAllAccounts", Account.class)
+                .getResultList();
+    }
+
     void save(Account account) {
         entityManager.persist(account);
     }
 
-    public List<Account> getAllAccounts() {
-        return entityManager.createNamedQuery("getAllAccounts", Account.class)
-                .getResultList();
+    public void remove(PendingOperation po) {
+        po.getAccount().getOperations().remove(po);
+        entityManager.persist(po.getAccount());
+        entityManager.remove(po);
     }
 }

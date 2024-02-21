@@ -1,7 +1,12 @@
 package io.helidon.example.lra.booking.dao;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
+
 import jakarta.persistence.Access;
 import jakarta.persistence.AccessType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,11 +15,9 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.List;
-
 import static jakarta.persistence.CascadeType.ALL;
+import static jakarta.persistence.CascadeType.MERGE;
+import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.FetchType.EAGER;
 
 @Entity(name = "Account")
@@ -30,16 +33,17 @@ public class Account implements Serializable {
 
     private List<PendingOperation> operations;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Column(unique = true)
     public String getNumber() {
         return number;
     }
@@ -56,7 +60,7 @@ public class Account implements Serializable {
         this.balance = balance;
     }
 
-    @OneToMany(mappedBy = "account", fetch = EAGER, cascade = ALL)
+    @OneToMany(mappedBy = "account", fetch = EAGER, cascade = PERSIST)
     public List<PendingOperation> getOperations() {
         return operations;
     }

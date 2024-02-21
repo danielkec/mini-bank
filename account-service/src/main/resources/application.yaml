@@ -1,6 +1,6 @@
 server:
-  port: ${PARTICIPANT_PORT}
-  host: ${PARTICIPANT_HOST}
+  port: 8080
+  host: 0.0.0.0
   static.classpath:
     location: /WEB
     welcome: index.html
@@ -8,7 +8,7 @@ server:
 mp.lra:
   coordinator.url: ${COORDINATOR_URL}
   propagation.active: true
-  participant.url: "http://${PARTICIPANT_HOST}:${PARTICIPANT_PORT}"
+  participant.url: "http://${server.host}:${server.port}"
 
 javax.sql.DataSource:
   accounts-db:

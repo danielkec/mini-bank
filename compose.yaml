@@ -14,29 +14,61 @@ services:
       - postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
 
+  ## MicroTx LRA coordinator
   lra-coordinator.local:
     container_name: micro-tx
-    image: container-registry.oracle.com/database/otmm:22.3
+    build: lra-coordinator
+    image: lra-example/lra-coordinator
     hostname: localhost
     ports:
       - "8080:8080"
     environment:
       CONFIG_FILE: /app/config/tcs.yaml
-    volumes:
-      - ./:/app/config
     restart: unless-stopped
 
+  ## Narayana LRA coordinator
+#  lra-coordinator.local:
+#    container_name: narayana-lra
+#    image: quay.io/jbosstm/lra-coordinator:latest
+#    hostname: localhost
+#    ports:
+#      - "8070:8080"
+#    restart: unless-stopped
+
   account-service.local:
-    build: .
+    build: account-service
     image: lra-example/account-service
     environment:
+      SERVER_HOST: account-service.local
+      SERVER_PORT: 8083
       DB_HOST: postgres.local
       DB_PORT: 5432
+      ## Narayana link
+#      COORDINATOR_URL: http://lra-coordinator.local:8080/lra-coordinator
+      ## MicroTx link
       COORDINATOR_URL: http://lra-coordinator.local:8080/api/v1/lra-coordinator
-      PARTICIPANT_HOST: account-service.local
-      PARTICIPANT_PORT: 8083
     ports:
       - "8083:8083"
+      # Debugger port
+      - "5010:5005"
+
+  transaction-service.local:
+    build: transaction-service
+    image: lra-example/transaction-service
+    environment:
+      SERVER_HOST: transaction-service.local
+      SERVER_PORT: 8084
+      DB_HOST: postgres.local
+      DB_PORT: 5432
+      ## Narayana link
+#      COORDINATOR_URL: http://lra-coordinator.local:8080/lra-coordinator
+      ## MicroTx link
+      COORDINATOR_URL: http://lra-coordinator.local:8080/api/v1/lra-coordinator
+      ACCOUNT_SERVICE_URL: http://account-service.local:8083
+    ports:
+      - "8084:8084"
+      # Debugger port
+      - "5020:5005"
 
 volumes:
   postgres-data:

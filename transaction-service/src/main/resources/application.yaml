@@ -1,0 +1,8 @@
+server:
+  port: 8080
+  host: 0.0.0.0
+
+mp.lra:
+  coordinator.url: ${COORDINATOR_URL}
+  propagation.active: true
+  participant.url: "http://${server.host}:${server.port}"

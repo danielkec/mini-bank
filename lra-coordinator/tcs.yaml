@@ -13,8 +13,8 @@ tmmConfiguration:
   minRetryInterval: 1000
   maxRetryInterval: 10000
   logging:
-    httpTraceEnabled: true
-    level: debug
+    httpTraceEnabled: false
+    level: info
     devMode: true
   storage:
     type: memory
