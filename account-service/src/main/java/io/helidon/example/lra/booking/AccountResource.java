@@ -128,7 +128,7 @@ public class AccountResource {
             LOG.log(INFO, "Clearing pending operation for account {0}", po.getAccount().getNumber());
             accountService.remove(po);
         }
-        return LRAResponse.compensated();
+        return LRAResponse.completed();
     }
 
     public record AccountOperation(String number, BigDecimal amount) {

@@ -1,0 +1,51 @@
+@startuml
+interface "curl -X PUT --json '{"from":"AB448", "to":"AB447", "amount":"100"}' localhost:8084/transaction/transfer" as curl
+
+component "Transaction Service" as tsvc{
+  port "transfer" as tp
+
+  port "complete" as tcomplete
+  port "compensate" as tcompensate
+}
+
+
+Component "Account Service" as asvc {
+  port "withdraw" as wp
+  port "enter" as ep
+
+  port "complete" as acomplete
+  port "compensate" as acompensate
+}
+
+Database db {
+  port "Get Balance" as getBalance
+  port "Update Balance" as updateBalance
+}
+
+component "Oracle MicroTX LRA Coordinator" as mtx{
+  port "startLRA" as startlra
+  port "joinLRA" as joinlra
+  port "closeLRA" as closelra
+  port "cancelLRA" as cancelra
+}
+
+
+
+curl -(0- tp
+tsvc -(0- wp
+tsvc -(0- ep
+asvc --> getBalance
+asvc --> updateBalance
+
+tsvc -(0- startlra
+tsvc -(0- joinlra
+asvc -(0- joinlra
+asvc -(0- cancelra
+tsvc -(0- closelra
+tsvc -(0- cancelra
+
+mtx -(0- acomplete
+mtx -(0- tcomplete
+mtx -(0- acompensate
+mtx -(0- tcompensate
+@enduml

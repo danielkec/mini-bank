@@ -1,0 +1,25 @@
+@startuml
+interface "curl -X PUT --json '{"from":"AB448", "to":"AB447", "amount":"100"}' localhost:8084/transaction/transfer" as curl
+
+component "Transaction Service" as tsvc{
+  port "transfer" as tp
+}
+
+
+Component "Account Service" as asvc {
+  port "withdraw" as wp
+  port "enter" as ep
+}
+
+Database db {
+  port "Get Balance" as getBalance
+  port "Update Balance" as updateBalance
+}
+
+
+curl -(0- tp
+tsvc -(0- wp
+tsvc -(0- ep
+asvc --> getBalance
+asvc --> updateBalance
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+Actor "User" as user
+Participant "Transaction Service" as traSvc
+Participant "Account Service" as accSvc
+Database DB as db
+
+user -> traSvc ++ #blue: transfer 100$ from A to B
+
+traSvc  ->  accSvc ++ #gold: withdraw 100$ from A
+accSvc <- db: Check enough funds
+accSvc -> db: deduct 100
+return 200 OK
+
+note right
+ JTA TX
+end note
+
+traSvc  ->  accSvc ++ #gold: enter 100$ to B
+accSvc -> db: add 100
+return 200 OK
+
+note right
+ JTA TX
+end note
+
+return 202 Accepted
+
+note right
+ LRA TX
+end note
+@enduml
